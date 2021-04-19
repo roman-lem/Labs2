@@ -14,23 +14,20 @@ for cell in  ws['A']:
 	x.append(cell.value)
 for cell in  ws['B']:
 	y.append(cell.value)
-print(x)
-print(y)
 
 # настраиваем детали отрисовки графиков
 plt.figure(figsize=(8, 6))
 
-plt.xlabel("N")
-plt.ylabel("f, Hz")
+plt.xlabel("t, c")
+plt.ylabel("P, 10^-4 Torr")
 
 plt.autoscale(tight=True)
 
 # рисуем исходные точки
-plt.errorbar(x, y, yerr=5, fmt='.', ecolor='red', color='red')
+plt.errorbar(x, y, yerr=0.05, xerr=0.5, fmt='.', ecolor='red', color='red')
 
-legend = []
 # аргументы для построения графиков моделей: исходный интервал + 60 дней
-fx = sp.linspace(x[0]-0.5, x[len(x) - 1]+0.5, 100)
+fx = sp.linspace(x[0], x[len(x) - 1], 100)
 
     # получаем параметры модели для полинома степени 1
 fp, residuals, rank, sv, rcond = sp.polyfit(x, y, 1, full=True)
@@ -67,13 +64,10 @@ print(koef)
 
 print("Погрешность = ")
 print(sigma)
-	
 
     # рисуем график модельной функции
 plt.plot(fx, f(fx), linewidth=2)
 
-
-plt.legend(legend, loc="upper left")
 plt.grid()
 plt.savefig('data.png', dpi=50)
 plt.show()
